@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login - Womendura</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f0fa;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 400px;
+      margin: 100px auto;
+      padding: 20px;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+      color: #7f3fbf;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: #7f3fbf;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .message {
+      text-align: center;
+      margin-top: 15px;
+      color: red;
+    }
+
+    a {
+      text-decoration: none;
+      color: #7f3fbf;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Login</h2>
+    <input type="text" id="username" placeholder="Username" required />
+    <input type="password" id="password" placeholder="Password" required />
+    <button onclick="login()">Login</button>
+    <div class="message" id="message"></div>
+    <p style="text-align:center;">Don't have an account? <a href="register.html">Register</a></p>
+  </div>
+
+  <script>
+    function login() {
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value.trim();
+      const message = document.getElementById('message');
+
+      const storedUser = localStorage.getItem(username);
+      if (!storedUser) {
+        message.textContent = 'User not found.';
+        return;
+      }
+
+      const userObj = JSON.parse(storedUser);
+      if (userObj.password === password) {
+        localStorage.setItem('loggedInUser', username);
+        window.location.href = 'dashboard.html'; // Protected PCOD content
+      } else {
+        message.textContent = 'Incorrect password.';
+      }
+    }
+  </script>
+</body>
+</html>

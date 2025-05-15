@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Dashboard - Womendura</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f5f0fa;
+      padding: 20px;
+    }
+
+    h2 {
+      color: #7f3fbf;
+    }
+
+    input, select {
+      padding: 8px;
+      margin: 5px;
+      width: 200px;
+    }
+
+    button {
+      background-color: #7f3fbf;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background-color: #692fbf;
+    }
+
+    table {
+      width: 100%;
+      margin-top: 30px;
+      border-collapse: collapse;
+      background-color: white;
+    }
+
+    th, td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: center;
+    }
+
+    th {
+      background-color: #eee;
+    }
+
+    .logout-btn {
+      float: right;
+      background-color: crimson;
+    }
+  </style>
+</head>
+<body>
+  <h2>Welcome, <span id="userName"></span></h2>
+  <button class="logout-btn" onclick="logout()">Logout</button>
+
+  <h3>Log Your PCOD Symptoms</h3>
+  <form id="symptomForm">
+    <input type="date" id="date" required />
+    <select id="mood" required>
+      <option value="">Mood</option>
+      <option>Happy</option>
+      <option>Sad</option>
+      <option>Moody</option>
+      <option>Stressed</option>
+    </select>
+    <select id="flow" required>
+      <option value="">Flow</option>
+      <option>Light</option>
+      <option>Medium</option>
+      <option>Heavy</option>
+    </select>
+    <select id="pain" required>
+      <option value="">Pain Level</option>
+      <option>Mild</option>
+      <option>Moderate</option>
+      <option>Severe</option>
+    </select>
+    <input type="text" id="exercise" placeholder="Exercise (Yes/No)" required />
+    <input type="text" id="diet" placeholder="Diet (Healthy/Junk)" required />
+    <br />
+    <button type="submit">Save Entry</button>
+  </form>
+
+  <h3>Symptom Log</h3>
+  <table id="symptomTable">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Mood</th>
+        <th>Flow</th>
+        <th>Pain</th>
+        <th>Exercise</th>
+        <th>Diet</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    const user = localStorage.getItem("loggedInUser");
+    const nameSpan = document.getElementById("userName");
+    const tableBody = document.querySelector("#symptomTable tbody");
+
+    if (!user) {
+      alert("You must log in first.");
+      window.location.href = "login.html";
+    } else {
+      nameSpan.textContent = user;
+    }
+
+    const storageKey = `symptoms_${user}`;
+
+    function renderTable() {
+      const entries = JSON.parse(localStorage.getItem(storageKey)) || [];
+      tableBody.innerHTML = "";
+
+      entries.forEach(entry => {
+        const row = document.createElement("tr");
+        Object.values(entry).forEach(val => {
+          const cell = document.createElement("td");
+          cell.textContent = val;
+          row.appendChild(cell);
+        });
+        tableBody.appendChild(row);
+      });
+    }
+
+    document.getElementById("symptomForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const entry = {
+        date: document.getElementById("date").value,
+        mood: document.getElementById("mood").value,
+        flow: document.getElementById("flow").value,
+        pain: document.getElementById("pain").value,
+        exercise: document.getElementById("exercise").value.trim(),
+        diet: document.getElementById("diet").value.trim(),
+      };
+
+      const existing = JSON.parse(localStorage.getItem(storageKey)) || [];
+      existing.push(entry);
+      localStorage.setItem(storageKey, JSON.stringify(existing));
+
+      this.reset();
+      renderTable();
+    });
+
+    function logout() {
+      localStorage.removeItem("loggedInUser");
+      window.location.href = "login.html";
+    }
+
+    renderTable(); // Load table on page load
+  </script>
+</body>
+</html>

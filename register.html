@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Register - Womendura</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f0fa;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 400px;
+      margin: 80px auto;
+      padding: 20px;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+      color: #7f3fbf;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: #7f3fbf;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    button:hover {
+      background-color: #692fbf;
+    }
+
+    .message {
+      text-align: center;
+      margin-top: 15px;
+      color: red;
+    }
+
+    a {
+      text-decoration: none;
+      color: #7f3fbf;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Create Account</h2>
+    <input type="text" id="username" placeholder="Username" required />
+    <input type="password" id="password" placeholder="Password" required />
+    <button onclick="register()">Register</button>
+    <div class="message" id="message"></div>
+    <p style="text-align:center;">Already have an account? <a href="login.html">Login here</a></p>
+  </div>
+
+  <script>
+    function register() {
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value.trim();
+      const message = document.getElementById('message');
+
+      if (!username || !password) {
+        message.textContent = 'Please fill all fields.';
+        return;
+      }
+
+      // Check if user already exists
+      if (localStorage.getItem(username)) {
+        message.textContent = 'Username already exists.';
+        return;
+      }
+
+      // Store user in localStorage
+      localStorage.setItem(username, JSON.stringify({ password }));
+      alert('Registration successful! Please login.');
+      window.location.href = 'login.html';
+    }
+  </script>
+</body>
+</html>
